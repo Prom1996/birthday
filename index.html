@@ -13,7 +13,10 @@
 <div id="celebration" class="celebration" aria-hidden="true"></div>
 
 <div id="intro" class="section">
-    <h1><span class="revolve">Happy Birthday</span> My Love 🎂💖</h1>
+    <h1 class="hero-title">
+        <span class="hero-title-top revolve">Happy Birthday</span>
+        <span class="hero-title-main">My Love Mun❤️</span> <span class="revolve">🎂💖</span>
+    </h1>
 
     <img
             src="images/birthday.jpg"
@@ -36,6 +39,21 @@
         Happy Birthday, my love ❤️<br><br>
         You are my favorite person, my safe place,
         and my forever. I love you endlessly 💖
+    </p>
+
+    <button class="primary-button" onclick="showForever()">One more thing...</button>
+</div>
+
+<div id="forever" class="section hidden">
+    <h1 class="forever-title">Will you be mine forever? 💍</h1>
+
+    <div class="forever-buttons">
+        <button id="yesButton" class="forever-btn forever-btn-yes" onclick="answerYes()">Yes</button>
+        <button id="noButton" class="forever-btn forever-btn-no">No</button>
+    </div>
+
+    <p id="foreverMessage" class="message forever-message hidden">
+        You are mine always 💖
     </p>
 </div>
 

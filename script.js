@@ -11,47 +11,69 @@ function pickRandom(arr) {
 
 function spawnCelebration(useBalloons) {
   var container = document.getElementById('celebration');
+  if (!container) return;
+
   container.innerHTML = '';
+
   var items = useBalloons ? BALLOONS_AND_FIRECRACKERS : FLOWERS_AND_POPPERS;
-  var count = useBalloons ? 90 : 75;
+  var count = useBalloons ? 90 : 60;
+
+  var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < count; i++) {
     var el = document.createElement('span');
     el.className = 'celebration-item';
-    el.textContent = pickRandom(items);
-    el.style.left = randomBetween(0, 100) + '%';
-    el.style.top = randomBetween(-10, 100) + '%';
-    el.style.fontSize = (randomBetween(14, 32)) + 'px';
-    var duration = Math.random() < 0.35 ? randomBetween(0.8, 1.4) : randomBetween(3, 5.5);
-    el.style.animationDuration = duration + 's';
-    el.style.animationDelay = (randomBetween(0, 0.8)) + 's';
+    el.textContent = items[(Math.random() * items.length) | 0];
 
-    if (Math.random() < 0.35) {
-      el.classList.add('pop');
-      el.style.left = randomBetween(5, 95) + '%';
-      el.style.top = randomBetween(10, 90) + '%';
-      el.style.animationDuration = (randomBetween(0.8, 1.4)) + 's';
-      el.style.animationDelay = (randomBetween(0, 0.5)) + 's';
-    }
+    el.style.left = Math.random() * 100 + '%';
+    el.style.top = (-10 + Math.random() * 110) + '%';
+    el.style.fontSize = (16 + Math.random() * 16) + 'px';
 
-    // Remove element after animation completes
-    el.addEventListener('animationend', function() {
-      if (this.parentNode) {
-        this.parentNode.removeChild(this);
-      }
-    });
+    if (Math.random() < 0.4) el.classList.add('pop');
 
-    container.appendChild(el);
+    fragment.appendChild(el);
   }
+
+  container.appendChild(fragment);
 }
+
 
 function openGift() {
-  spawnCelebration(true);
-  setTimeout(function() {
+  playBirthdayMusic();
+
+   var gift = document.querySelector('.gift-box');
+  if (gift) gift.style.transform = 'scale(0.9)';
+
+  requestAnimationFrame(function () {
+     spawnCelebration(true);
+   });
+
+  setTimeout(function () {
     document.getElementById('gift-screen').classList.add('hidden');
     document.getElementById('intro').classList.remove('hidden');
-  }, 2000);
+  }, 900);
 }
+
+
+
+function playBirthdayMusic() {
+  var music = document.getElementById('birthdayMusic');
+  if (!music) return;
+
+  music.volume = 0;
+  music.currentTime = 0;
+  music.play().catch(function () {});
+
+  var vol = 0;
+  var fade = setInterval(function () {
+    vol += 0.05;
+    music.volume = Math.min(vol, 0.5);
+    if (vol >= 0.5) clearInterval(fade);
+  }, 120);
+}
+
+
+
 
 function showSurprise() {
   document.getElementById('intro').classList.add('hidden');

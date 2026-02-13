@@ -1,4 +1,5 @@
 var FLOWERS_AND_POPPERS = ['🌸', '🌺', '🌷', '🌻', '💐', '🪷', '🌼', '🎉', '🎊', '🎉', '🎊', '✨', '💖'];
+var BALLOONS_AND_FIRECRACKERS = ['🎈', '🎈', '🎈', '🎈', '🎈', '🧨', '🧨', '🧨', '🎆', '🎇', '✨', '💥', '🎉', '🎊'];
 
 function randomBetween(min, max) {
   return min + Math.random() * (max - min);
@@ -8,19 +9,21 @@ function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function spawnCelebration() {
+function spawnCelebration(useBalloons) {
   var container = document.getElementById('celebration');
   container.innerHTML = '';
-  var count = 75;
+  var items = useBalloons ? BALLOONS_AND_FIRECRACKERS : FLOWERS_AND_POPPERS;
+  var count = useBalloons ? 90 : 75;
 
   for (var i = 0; i < count; i++) {
     var el = document.createElement('span');
     el.className = 'celebration-item';
-    el.textContent = pickRandom(FLOWERS_AND_POPPERS);
+    el.textContent = pickRandom(items);
     el.style.left = randomBetween(0, 100) + '%';
     el.style.top = randomBetween(-10, 100) + '%';
     el.style.fontSize = (randomBetween(14, 32)) + 'px';
-    el.style.animationDuration = (randomBetween(3, 5.5)) + 's';
+    var duration = Math.random() < 0.35 ? randomBetween(0.8, 1.4) : randomBetween(3, 5.5);
+    el.style.animationDuration = duration + 's';
     el.style.animationDelay = (randomBetween(0, 0.8)) + 's';
 
     if (Math.random() < 0.35) {
@@ -31,8 +34,23 @@ function spawnCelebration() {
       el.style.animationDelay = (randomBetween(0, 0.5)) + 's';
     }
 
+    // Remove element after animation completes
+    el.addEventListener('animationend', function() {
+      if (this.parentNode) {
+        this.parentNode.removeChild(this);
+      }
+    });
+
     container.appendChild(el);
   }
+}
+
+function openGift() {
+  spawnCelebration(true);
+  setTimeout(function() {
+    document.getElementById('gift-screen').classList.add('hidden');
+    document.getElementById('intro').classList.remove('hidden');
+  }, 2000);
 }
 
 function showSurprise() {
